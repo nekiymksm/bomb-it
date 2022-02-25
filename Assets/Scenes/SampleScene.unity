@@ -547,8 +547,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelConfig: {fileID: 11400000, guid: 1711fc4c11e1e3c45bc1d022060c0773, type: 2}
-  _playerPrefab: {fileID: 6364040649996368241, guid: fdcfb758cf94ab44ab759b1b59fafe20, type: 3}
-  _enemyPrefab: {fileID: 7098692520814567506, guid: ce2ebbe2098309443a41c1619ca52555, type: 3}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,6 +643,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6f4ff935f25d354089bbb3e6c3df4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _level: {fileID: 949147456}
+  _defaultPosition: {x: 0, y: 7.5, z: -7.5}
+  _moveSpeed: 550
+  _indent: 0.25
 --- !u!1 &2003916598
 GameObject:
   m_ObjectHideFlags: 0

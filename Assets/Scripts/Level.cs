@@ -1,25 +1,32 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Level : MonoBehaviour
 {
     [SerializeField] private LevelConfig _levelConfig;
-    [SerializeField] private Character _playerPrefab;
-    [SerializeField] private Character _enemyPrefab;
 
     private Ground _ground;
     private List<Border> _bordersPool;
     private List<Obstacle> _obstaclesPool;
     private List<SpawnPointer> _spawnPointersPool;
-    
-    private LevelBuilder _levelBuilder;
-    private CharactersSpawner _charactersSpawner;
-    private List<SpawnPointer> _spawnPointers;
     private List<Character> _charactersPool;
+    
+    private LevelAssembler _levelAssembler;
+    private CharactersSpawner _charactersSpawner;
+    
+    public Border LeftBorder { get; set; }
+    public Border RightBorder { get; set; }
+    public Border BottomBorder { get; set; }
+    public Border TopBorder { get; set; }
+    public List<SpawnPointer> SpawnPointers { get; set; }
+    public List<Character> CharactersPool => _charactersPool;
+
+    public event Action LevelStarted;
 
     private void Awake()
     {
-        LoadLevelEnvironments();
+        LoadLevelItems();
         LoadCharacters();
         
         gameObject.SetActive(false);
@@ -29,11 +36,13 @@ public class Level : MonoBehaviour
     {
         gameObject.SetActive(true);
         
-        _levelBuilder = new LevelBuilder();
+        _levelAssembler = new LevelAssembler();
         _charactersSpawner = new CharactersSpawner();
         
-        _levelBuilder.BuildLevel(this, _levelConfig, _ground, _bordersPool, _obstaclesPool, _spawnPointersPool);
-        _charactersSpawner.Spawn(_charactersPool, _spawnPointers);
+        _levelAssembler.Assemble(this, _levelConfig, _ground, _bordersPool, _obstaclesPool, _spawnPointersPool);
+        _charactersSpawner.Spawn(_charactersPool, SpawnPointers);
+        
+        LevelStarted?.Invoke();
     }
 
     public void ClearLevel()
@@ -41,62 +50,57 @@ public class Level : MonoBehaviour
         _ground.gameObject.SetActive(false);
         _ground.transform.SetParent(transform);
 
-        RefreshLevelEnvironmentsPool(_bordersPool);
-        RefreshLevelEnvironmentsPool(_obstaclesPool);
-        RefreshLevelEnvironmentsPool(_spawnPointersPool);
+        RefreshLevelItemsPool(_bordersPool);
+        RefreshLevelItemsPool(_obstaclesPool);
+        RefreshLevelItemsPool(_spawnPointersPool);
 
         foreach (var character in _charactersPool)
             character.gameObject.SetActive(false);
     }
-    
-    public void SetAttributes(List<SpawnPointer> spawnPointers)
-    {
-        _spawnPointers = spawnPointers;
-    }
 
-    private void LoadLevelEnvironments()
+    private void LoadLevelItems()
     {
         _ground = Instantiate(_levelConfig.GroundPrefab, transform);
         _ground.gameObject.SetActive(false);
         
-        _bordersPool = GetLevelEnvironmentsPool(_levelConfig.BorderPrefab, _levelConfig.BordersCount);
-        _obstaclesPool = GetLevelEnvironmentsPool(_levelConfig.ObstaclePrefab, 
+        _bordersPool = GetLevelItemsPool(_levelConfig.BorderPrefab, _levelConfig.BordersCount);
+        _obstaclesPool = GetLevelItemsPool(_levelConfig.ObstaclePrefab, 
             _levelConfig.MaxObstaclesInLineCount * (_levelConfig.MaxObstaclesInLineCount / 2));
-        _spawnPointersPool = GetLevelEnvironmentsPool(_levelConfig.SpawnPointerPrefab, _levelConfig.MaxObstaclesInLineCount);
+        _spawnPointersPool = GetLevelItemsPool(_levelConfig.SpawnPointerPrefab, _levelConfig.MaxObstaclesInLineCount);
     }
 
     private void LoadCharacters()
     {
         _charactersPool = new List<Character>();
         
-        var player = Instantiate(_playerPrefab, transform);
+        var player = Instantiate(_levelConfig.PlayerPrefab, transform);
         
         player.gameObject.SetActive(false);
         _charactersPool.Add(player);
 
         for (int i = 0; i < _levelConfig.MaxObstaclesInLineCount / 2; i++)
         {
-            var enemy = Instantiate(_enemyPrefab, transform);
+            var enemy = Instantiate(_levelConfig.EnemyPrefab, transform);
             
             enemy.gameObject.SetActive(false);
             _charactersPool.Add(enemy);
         }
     }
 
-    private List<T> GetLevelEnvironmentsPool<T>(T prefab, int count) where T : LevelEnvironment
+    private List<T> GetLevelItemsPool<T>(T prefab, int count) where T : LevelItem
     {
-        var environments = new List<T>();
+        var items = new List<T>();
 
         for (int i = 0; i < count; i++)
         {
-            environments.Add(Instantiate(prefab, transform));
-            environments[i].gameObject.SetActive(false);
+            items.Add(Instantiate(prefab, transform));
+            items[i].gameObject.SetActive(false);
         }
 
-        return environments;
+        return items;
     }
 
-    private void RefreshLevelEnvironmentsPool<T>(List<T> itemsPool) where T : LevelEnvironment
+    private void RefreshLevelItemsPool<T>(List<T> itemsPool) where T : LevelItem
     {
         foreach (var item in itemsPool)
         {
