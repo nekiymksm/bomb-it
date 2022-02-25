@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c61830f7bdc3c94da170e0256eb5bac, type: 3}
+  m_Name: LevelConfig
+  m_EditorClassIdentifier: 
+  _groundPrefab: {fileID: -3137776828656773099, guid: 10e46b58b94442846b74f366b355c7a2, type: 3}
+  _borderPrefab: {fileID: -2706117075926552122, guid: dc137a6ad3bf5014fb01912f2deee3ec, type: 3}
+  _obstaclePrefab: {fileID: 2504747663608451131, guid: c4b111ee5d626d144b5ff194acc00344, type: 3}
+  _spawnPointerPrefab: {fileID: 163883551670934479, guid: efe4f800a0efb434e883b331fffd06e3, type: 3}
+  _bordersCount: 4
+  _maxObstaclesInLineCount: 10
+  _minObstaclesInLineCount: 6
+  _spawnPointersColumnsCount: 2
+  _passWidth: 2
