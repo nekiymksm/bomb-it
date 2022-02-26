@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private CharacterController _characterController;
     [SerializeField] private float _moveSpeedModifier;
     [SerializeField] private float _rotateSpeedModifier;
-    
+
     private float _horizontalPointer;
     private float _verticalPointer;
     
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         var moveVector = new Vector3(_horizontalPointer, 0, _verticalPointer) * _moveSpeedModifier;
         
-        transform.Translate(moveVector * Time.deltaTime, Space.World);
+        _characterController.Move(moveVector * Time.deltaTime);
     
         if (moveVector != Vector3.zero)
         {
