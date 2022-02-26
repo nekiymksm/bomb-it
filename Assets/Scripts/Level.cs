@@ -14,13 +14,15 @@ public class Level : MonoBehaviour
     
     private LevelAssembler _levelAssembler;
     private CharactersSpawner _charactersSpawner;
+
+    private Character _player;
     
     public Border LeftBorder { get; set; }
     public Border RightBorder { get; set; }
     public Border BottomBorder { get; set; }
     public Border TopBorder { get; set; }
     public List<SpawnPointer> SpawnPointers { get; set; }
-    public List<Character> CharactersPool => _charactersPool;
+    public Character Player => _player;
 
     public event Action LevelStarted;
 
@@ -73,10 +75,10 @@ public class Level : MonoBehaviour
     {
         _charactersPool = new List<Character>();
         
-        var player = Instantiate(_levelConfig.PlayerPrefab, transform);
+        _player = Instantiate(_levelConfig.PlayerPrefab, transform);
         
-        player.gameObject.SetActive(false);
-        _charactersPool.Add(player);
+        _player.gameObject.SetActive(false);
+        _charactersPool.Add(_player);
 
         for (int i = 0; i < _levelConfig.MaxObstaclesInLineCount / 2; i++)
         {
