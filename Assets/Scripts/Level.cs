@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Level : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Level : MonoBehaviour
     private LevelAssembler _levelAssembler;
     private CharactersSpawner _charactersSpawner;
 
+    private NavMeshSurface _navMeshSurface;
     private Character _player;
     
     public Border LeftBorder { get; set; }
@@ -22,6 +24,7 @@ public class Level : MonoBehaviour
     public Border BottomBorder { get; set; }
     public Border TopBorder { get; set; }
     public List<SpawnPointer> SpawnPointers { get; set; }
+    
     public Character Player => _player;
 
     public event Action LevelStarted;
@@ -31,7 +34,7 @@ public class Level : MonoBehaviour
         LoadLevelItems();
         LoadCharacters();
         
-        gameObject.SetActive(false);
+        _navMeshSurface = _ground.GetComponent<NavMeshSurface>();
     }
 
     public void StartLevel()
@@ -42,8 +45,9 @@ public class Level : MonoBehaviour
         _charactersSpawner = new CharactersSpawner();
         
         _levelAssembler.Assemble(this, _levelConfig, _ground, _bordersPool, _obstaclesPool, _spawnPointersPool);
+        _navMeshSurface.BuildNavMesh();
         _charactersSpawner.Spawn(_charactersPool, SpawnPointers);
-        
+
         LevelStarted?.Invoke();
     }
 

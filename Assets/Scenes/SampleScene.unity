@@ -106,15 +106,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.5
-    agentHeight: 1
-    agentSlope: 45
-    agentClimb: 0.4
+    agentRadius: 0.25
+    agentHeight: 0.75
+    agentSlope: 0
+    agentClimb: 0
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.16666667
+    cellSize: 0.083333336
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -646,7 +646,6 @@ MonoBehaviour:
   _level: {fileID: 949147456}
   _defaultPosition: {x: 0, y: 5, z: -4.5}
   _moveSpeed: 10
-  _indent: 0
 --- !u!1 &2003916598
 GameObject:
   m_ObjectHideFlags: 0

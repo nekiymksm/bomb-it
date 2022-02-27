@@ -13,17 +13,16 @@ public class PlayerTracker : MonoBehaviour
     private float _rightLimit;
     private float _bottomLimit;
     private float _topLimit;
-    
+
     private void Awake()
     {
         _camera = Camera.main;
+        _playerController = _level.Player.GetComponent<PlayerController>();
     }
-    
+
     private void Start()
     {
         _level.LevelStarted += SetCamera;
-
-        _playerController = _level.Player.GetComponent<PlayerController>();
     }
     
     private void Update()

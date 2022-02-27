@@ -18,7 +18,8 @@ public class MainMenu : UiItem
 
     private void OnPlayButtonClick()
     {
-        _level.StartLevel();
         gameObject.SetActive(false);
+        
+        _level.StartLevel();
     }
 }

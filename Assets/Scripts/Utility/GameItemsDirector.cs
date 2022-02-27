@@ -1,18 +1,25 @@
+using System;
 using UnityEngine;
 
 public class GameItemsDirector : MonoBehaviour
 {
     [SerializeField] private UiRoot _uiRoot;
-    [SerializeField] private Level _level;
+
+    private MainMenu _mainMenu;
+
+    private void Awake()
+    {
+        _mainMenu = _uiRoot.GetUiItem<MainMenu>();
+    }
 
     private void Start()
     {
-        _uiRoot.GetUiItem<MainMenu>().gameObject.SetActive(true);
+        _mainMenu.gameObject.SetActive(true);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && _level.gameObject.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && _mainMenu.gameObject.activeSelf == false)
         {
             _uiRoot.GetUiItem<PauseMenu>().gameObject.SetActive(true);
         }
