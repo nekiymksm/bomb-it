@@ -17,7 +17,7 @@ public class Level : MonoBehaviour
     private CharactersSpawner _charactersSpawner;
 
     private NavMeshSurface _navMeshSurface;
-    private Character _player;
+    private Player _player;
     
     public Border LeftBorder { get; set; }
     public Border RightBorder { get; set; }
@@ -25,7 +25,7 @@ public class Level : MonoBehaviour
     public Border TopBorder { get; set; }
     public List<SpawnPointer> SpawnPointers { get; set; }
     
-    public Character Player => _player;
+    public Player Player => _player;
 
     public event Action LevelStarted;
 

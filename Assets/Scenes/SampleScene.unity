@@ -676,7 +676,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiRoot: {fileID: 682382610}
-  _level: {fileID: 949147456}
 --- !u!4 &2003916600
 Transform:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LevelConfig", menuName = "GameConfigs/LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
-    [SerializeField] private Character _playerPrefab;
+    [SerializeField] private Player _playerPrefab;
     [SerializeField] private Character _enemyPrefab;
     [SerializeField] private Ground _groundPrefab;
     [SerializeField] private Border _borderPrefab;
@@ -15,7 +15,7 @@ public class LevelConfig : ScriptableObject
     [SerializeField] private int _spawnPointersColumnsCount;
     [SerializeField] private int _passWidth;
 
-    public Character PlayerPrefab => _playerPrefab;
+    public Player PlayerPrefab => _playerPrefab;
     public Character EnemyPrefab => _enemyPrefab;
     public Ground GroundPrefab => _groundPrefab;
     public Border BorderPrefab => _borderPrefab;

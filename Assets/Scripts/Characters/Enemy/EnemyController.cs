@@ -3,48 +3,52 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(Enemy))]
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField] private Enemy _enemy;
     [SerializeField] private NavMeshAgent _navMeshAgent;
     [SerializeField] private float _maxMovingDuration;
     [SerializeField] private float _minMovingDuration;
-
+    
     private Level _level;
-    private float _horizontalPointer;
-    private float _verticalPointer;
 
     private void Awake()
     {
-        _level = GetComponentInParent<Level>();
+        _level = _enemy.Level;
     }
-
+    
     private void OnEnable()
     {
-        _level.LevelStarted += Move;
+        _level.LevelStarted += StartMove;
     }
 
     private void OnDisable()
     {
-        _navMeshAgent.enabled = false;
+        _level.LevelStarted -= StartMove;
         
-        _level.LevelStarted -= Move;
+        _navMeshAgent.enabled = false;
     }
 
-    private void Move()
+    private void StartMove()
     {
         if (gameObject.activeSelf)
         {
             _navMeshAgent.enabled = true;
-            StartMoving();
+            
+            Move();
         }
     }
 
-    private void StartMoving()
+    private void Move()
     {
-        _horizontalPointer = Random.Range(_level.LeftBorder.transform.position.x, _level.RightBorder.transform.position.x);
-        _verticalPointer = Random.Range(_level.BottomBorder.transform.position.z, _level.TopBorder.transform.position.z);
-
-        _navMeshAgent.destination = new Vector3(_horizontalPointer, transform.position.y, _verticalPointer);
+        var destination = new Vector3();
+        
+        destination.x = Random.Range(_level.LeftBorder.transform.position.x, _level.RightBorder.transform.position.x);
+        destination.y = transform.position.y;
+        destination.z = Random.Range(_level.BottomBorder.transform.position.z, _level.TopBorder.transform.position.z);
+        
+        _navMeshAgent.SetDestination(destination);
         
         StartCoroutine(DelayDestinationChange());
     }
@@ -53,6 +57,6 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(_minMovingDuration, _maxMovingDuration));
         
-        StartMoving();
+        Move();
     }
 }
