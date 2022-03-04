@@ -12,14 +12,18 @@ public class GroundBuilder : Builder
 
     private void SetGround(LevelAssembler levelAssembler)
     {
+        var scale = new Vector3();
+        
         levelAssembler.GroundLength = levelAssembler.HorizontalLevelSize * levelAssembler.LevelConfig.PassWidth;
-        levelAssembler. GroundWidth = levelAssembler.VerticalLevelSize * levelAssembler.LevelConfig.PassWidth;
+        levelAssembler.GroundWidth = levelAssembler.VerticalLevelSize * levelAssembler.LevelConfig.PassWidth;
         
         levelAssembler.Ground.gameObject.SetActive(true);
-        levelAssembler.Ground.transform.localScale = 
-            new Vector3(levelAssembler.GroundLength + levelAssembler.LevelConfig.GroundPrefab.transform.localScale.x, 
-            levelAssembler.LevelConfig.GroundPrefab.transform.localScale.y, 
-            levelAssembler.GroundWidth + levelAssembler.LevelConfig.GroundPrefab.transform.localScale.z);
+
+        scale.x = levelAssembler.GroundLength + levelAssembler.LevelConfig.PassWidth;
+        scale.y = levelAssembler.LevelConfig.GroundPrefab.transform.localScale.y;
+        scale.z = levelAssembler.GroundWidth + levelAssembler.LevelConfig.PassWidth;
+        
+        levelAssembler.Ground.transform.localScale = scale;
         levelAssembler.Ground.transform.SetParent(levelAssembler.Level.transform);
     }
 }

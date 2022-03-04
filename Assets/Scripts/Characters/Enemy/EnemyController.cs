@@ -42,13 +42,11 @@ public class EnemyController : MonoBehaviour
 
     private void Move()
     {
-        var destination = new Vector3();
-        
-        destination.x = Random.Range(_level.LeftBorder.transform.position.x, _level.RightBorder.transform.position.x);
-        destination.y = transform.position.y;
-        destination.z = Random.Range(_level.BottomBorder.transform.position.z, _level.TopBorder.transform.position.z);
-        
-        _navMeshAgent.SetDestination(destination);
+        var horizontalLevelLimit = _level.Ground.transform.localScale.x / 2;
+        var verticalLevelLimit = _level.Ground.transform.localScale.z / 2;
+
+        _navMeshAgent.SetDestination(new Vector3(Random.Range(-horizontalLevelLimit, horizontalLevelLimit), 
+            transform.position.y, Random.Range(-verticalLevelLimit, verticalLevelLimit)));
         
         StartCoroutine(DelayDestinationChange());
     }

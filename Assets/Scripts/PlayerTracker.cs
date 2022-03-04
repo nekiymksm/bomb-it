@@ -45,10 +45,12 @@ public class PlayerTracker : MonoBehaviour
     
     private void SetCamera()
     {
-        _leftLimit = _level.LeftBorder.transform.position.x + _camera.orthographicSize * _camera.aspect;
-        _rightLimit = _level.RightBorder.transform.position.x - _camera.orthographicSize * _camera.aspect;
-        _bottomLimit = _level.BottomBorder.transform.position.z - _camera.orthographicSize;
-        _topLimit = _level.TopBorder.transform.position.z - _camera.orthographicSize - _defaultPosition.y;
+        var groundScale = _level.Ground.transform.localScale;
+        
+        _leftLimit = -groundScale.x / 2 + _camera.orthographicSize * _camera.aspect;
+        _rightLimit = groundScale.x / 2 - _camera.orthographicSize * _camera.aspect;
+        _bottomLimit = -groundScale.z / 2 - _camera.orthographicSize;
+        _topLimit = groundScale.z / 2 - _camera.orthographicSize - _defaultPosition.y;
 
         transform.position = _player.transform.position + _defaultPosition;
         SetPosition();

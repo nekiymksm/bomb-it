@@ -6,12 +6,12 @@ public class Bomb : MonoBehaviour
     [SerializeField] private BombingConfig _bombingConfig;
 
     private ItemsPool _blastWaves;
-    private Level _level;
-
+    private Player _player;
+    
     private void Awake()
     {
-        _level = GetComponentInParent<Player>().Level;
-        
+        _player = GetComponentInParent<Player>();
+
         LoadBlastWaves();
     }
 
@@ -36,18 +36,24 @@ public class Bomb : MonoBehaviour
             var blastWave = _blastWaves.TryGetItem();
             var direction = GetExplodeDirection(explodeDirectionAngle, i);
             var distance = GetExplodeDistance(direction);
+            
             var position = new Vector3();
 
             position.x = transform.position.x + distance * direction.x;
-            position.y = transform.position.y;;
+            position.y = transform.position.y;
             position.z = transform.position.z + distance * direction.z;
-
-            blastWave.transform.SetParent(_level.transform);
-            blastWave.transform.position = position;
             
-            SetExplodeScale(blastWave, distance, i);
-        }
+            var scale = new Vector3();
+            
+            scale.x = distance * 2 * Mathf.Abs(direction.x) + blastWave.transform.localScale.x;
+            scale.y = blastWave.transform.localScale.y;
+            scale.z = distance * 2 * Mathf.Abs(direction.z) + blastWave.transform.localScale.z;
 
+            blastWave.transform.position = position;
+            blastWave.transform.localScale = scale;
+            blastWave.transform.SetParent(_player.Level.transform);
+        }
+        
         gameObject.SetActive(false);
     }
 
@@ -70,14 +76,6 @@ public class Bomb : MonoBehaviour
             && hit.collider.TryGetComponent(out Obstacle obstacle)) {spawnDistance = hit.distance / 2;}
 
         return spawnDistance;
-    }
-
-    private void SetExplodeScale(GameObject blastWave, float distance, float blastNumber)
-    {
-        blastWave.transform.Rotate(0, 360 / _bombingConfig.BlastWavesCount * blastNumber , 0);
-        
-        blastWave.transform.localScale = new Vector3(distance * 2, 
-            blastWave.transform.localScale.y, blastWave.transform.localScale.z);
     }
 
     private IEnumerator DelayExplosion()

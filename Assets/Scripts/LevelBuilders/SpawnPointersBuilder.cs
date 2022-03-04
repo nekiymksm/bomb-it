@@ -15,7 +15,7 @@ public class SpawnPointersBuilder : Builder
     {
         levelAssembler.Level.SpawnPointers = new List<SpawnPointer>();
         
-        float obstaclesCountInLine = levelAssembler.HorizontalLevelSize / 2;
+        int obstaclesCountInLine = levelAssembler.HorizontalLevelSize / 2;
         float xAxisPointersModifier = levelAssembler.GroundLength / obstaclesCountInLine;
         float xAxisLengthIndent = levelAssembler.GroundLength / 2 / xAxisPointersModifier;
     

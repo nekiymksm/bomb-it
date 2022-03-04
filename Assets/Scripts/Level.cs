@@ -19,13 +19,10 @@ public class Level : MonoBehaviour
     private NavMeshSurface _navMeshSurface;
     private Player _player;
     
-    public Border LeftBorder { get; set; }
-    public Border RightBorder { get; set; }
-    public Border BottomBorder { get; set; }
-    public Border TopBorder { get; set; }
     public List<SpawnPointer> SpawnPointers { get; set; }
     
     public Player Player => _player;
+    public Ground Ground => _ground;
 
     public event Action LevelStarted;
 

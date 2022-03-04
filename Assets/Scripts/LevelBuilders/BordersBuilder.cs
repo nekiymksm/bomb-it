@@ -4,41 +4,41 @@ public class BordersBuilder : Builder
 {
     public override void Build(LevelAssembler levelAssembler)
     {
-        SetLevelBorders(levelAssembler);
+        SetBorders(levelAssembler);
         
         if (Successor != null)
             Successor.Build(levelAssembler);
     }
 
-    private void SetLevelBorders(LevelAssembler levelAssembler)
+    private void SetBorders(LevelAssembler levelAssembler)
     {
-        float obstaclePrefabXScale = levelAssembler.LevelConfig.ObstaclePrefab.transform.localScale.x;
-        float obstaclePrefabZScale = levelAssembler.LevelConfig.ObstaclePrefab.transform.localScale.z;
+        var directionAngle = 360 * Mathf.Deg2Rad;
+        var levelConfig = levelAssembler.LevelConfig;
         
-        levelAssembler.Level.LeftBorder = 
-            SetBorder(levelAssembler, -levelAssembler.GroundLength / 2 - levelAssembler.LevelConfig.PassWidth + obstaclePrefabXScale, 
-                0, obstaclePrefabXScale, levelAssembler.GroundWidth + levelAssembler.LevelConfig.PassWidth);
-        
-        levelAssembler.Level.RightBorder = 
-            SetBorder(levelAssembler, levelAssembler.GroundLength / 2 + obstaclePrefabXScale, 0, obstaclePrefabXScale, 
-            levelAssembler.GroundWidth + levelAssembler.LevelConfig.PassWidth);
-        
-        levelAssembler.Level.BottomBorder = 
-            SetBorder(levelAssembler, 0, -levelAssembler.GroundWidth / 2 - levelAssembler.LevelConfig.PassWidth + obstaclePrefabZScale,
-            levelAssembler.GroundLength + levelAssembler.LevelConfig.PassWidth, obstaclePrefabZScale);
-        
-        levelAssembler.Level.TopBorder = SetBorder(levelAssembler, 0, levelAssembler.GroundWidth / 2 + obstaclePrefabZScale, 
-            levelAssembler.GroundLength + levelAssembler.LevelConfig.PassWidth, obstaclePrefabZScale);
-    }
-    
-    private Border SetBorder(LevelAssembler levelAssembler, float xPosition, float zPosition, float xScale, float zScale)
-    {
-        Border border = GetLevelItem(levelAssembler.BordersPool);
+        for (int i = 0; i < levelConfig.BordersCount; i++)
+        {
+            var border = GetLevelItem(levelAssembler.BordersPool);
 
-        border.transform.position = new Vector3(xPosition, 0, zPosition);
-        border.transform.localScale = new Vector3(xScale, levelAssembler.LevelConfig.BorderPrefab.transform.localScale.y, zScale);
-        border.transform.SetParent(levelAssembler.Ground.transform);
+            var xAxisDirection = Mathf.Cos(directionAngle / levelConfig.BordersCount * i);
+            var zAxisDirection = Mathf.Sin(directionAngle / levelConfig.BordersCount * i);
+            
+            var position = new Vector3();
+            
+            position.y = 0;
+            position.x = (levelAssembler.GroundLength / 2 + levelConfig.ObstaclePrefab.transform.localScale.x) * xAxisDirection;
+            position.z = (levelAssembler.GroundWidth / 2 + levelConfig.ObstaclePrefab.transform.localScale.z) * zAxisDirection;
 
-        return border;
+            var scale = new Vector3();
+            
+            scale.y = levelConfig.BorderPrefab.transform.localScale.y;
+            scale.x = (levelAssembler.GroundLength + levelConfig.PassWidth) * Mathf.Abs(zAxisDirection) +
+                levelConfig.BorderPrefab.transform.localScale.z;
+            scale.z = (levelAssembler.GroundWidth + levelConfig.PassWidth) * Mathf.Abs(xAxisDirection) + 
+                      levelConfig.BorderPrefab.transform.localScale.x;
+            
+            border.transform.position = position;
+            border.transform.localScale = scale;
+            border.transform.SetParent(levelAssembler.Ground.transform);
+        }
     }
 }
