@@ -9,10 +9,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _rotateSpeedModifier;
 
     private Level _level;
+    private GameDirector _gameDirector;
 
     private void Awake()
     {
         _level = _player.Level;
+        _gameDirector = GetComponentInParent<GameDirector>();
     }
 
     private void FixedUpdate()
@@ -45,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void TrySpawnBomb()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && _gameDirector.GamePaused == false)
         {
             var bomb = _player.BombsPool.TryGetItem();
 

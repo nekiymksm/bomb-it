@@ -2,32 +2,32 @@ using UnityEngine;
 
 public class ObstaclesBuilder : Builder 
 {
-    public override void Build(LevelAssembler levelAssembler)
+    public override void Build(LevelDirector levelDirector)
     {
-        SetObstacles(levelAssembler);
+        SetObstacles(levelDirector);
         
         if (Successor != null)
-            Successor.Build(levelAssembler);
+            Successor.Build(levelDirector);
     }
 
-    private void SetObstacles(LevelAssembler levelAssembler)
+    private void SetObstacles(LevelDirector levelDirector)
     {
-        for (int i = 0; i < levelAssembler.VerticalLevelSize; i++)
+        for (int i = 0; i < levelDirector.VerticalSize; i++)
         {
             float verticalPointer = 
-                levelAssembler.GroundWidth / 2 - levelAssembler.LevelConfig.ObstaclePrefab.transform.localScale.z 
-                                               - i * levelAssembler.LevelConfig.PassWidth;
+                levelDirector.LevelWidth / 2 - levelDirector.LevelConfig.ObstaclePrefab.transform.localScale.z 
+                                               - i * levelDirector.LevelConfig.PassWidth;
             
-            for (int j = 0; j < levelAssembler.HorizontalLevelSize; j++)
+            for (int j = 0; j < levelDirector.HorizontalSize; j++)
             {
                 float horizontalPointer = 
-                    levelAssembler.GroundLength / 2 - levelAssembler.LevelConfig.ObstaclePrefab.transform.localScale.x 
-                                                    - j * levelAssembler.LevelConfig.PassWidth;
+                    levelDirector.LevelLength / 2 - levelDirector.LevelConfig.ObstaclePrefab.transform.localScale.x 
+                                                    - j * levelDirector.LevelConfig.PassWidth;
                 
-                var obstacle = GetLevelItem(levelAssembler.ObstaclesPool);
+                var obstacle = levelDirector.Obstacles.TryGetItem();
 
                 obstacle.transform.position = new Vector3(horizontalPointer, 0, verticalPointer);
-                obstacle.transform.SetParent(levelAssembler.Ground.transform);
+                obstacle.transform.SetParent(levelDirector.Ground.transform);
             }
         }
     }

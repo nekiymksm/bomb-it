@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,20 +8,20 @@ public class PauseMenu : UiItem
     [SerializeField] private Button _resumeButton;
     [SerializeField] private Button _restartButton;
 
+    public event Action Closed;
+    
     protected override void OnOpen()
     {
         _resumeButton.onClick.AddListener(OnResumeButtonClick);
         _restartButton.onClick.AddListener(OnRestartButtonClick);
-        
-        Time.timeScale = 0;
     }
 
     protected override void OnClose()
     {
         _resumeButton.onClick.RemoveListener(OnResumeButtonClick);
         _restartButton.onClick.RemoveListener(OnRestartButtonClick);
-        
-        Time.timeScale = 1;
+
+        Closed?.Invoke();
     }
 
     private void OnResumeButtonClick()

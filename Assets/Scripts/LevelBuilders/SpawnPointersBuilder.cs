@@ -3,36 +3,50 @@ using UnityEngine;
 
 public class SpawnPointersBuilder : Builder
 {
-    public override void Build(LevelAssembler levelAssembler)
+    public override void Build(LevelDirector levelDirector)
     {
-        SetSpawnPointers(levelAssembler);
+        SetSpawnPointers(levelDirector);
         
         if (Successor != null)
-            Successor.Build(levelAssembler);
+            Successor.Build(levelDirector);
     }
 
-    private void SetSpawnPointers(LevelAssembler levelAssembler)
+    private void SetSpawnPointers(LevelDirector levelDirector)
     {
-        levelAssembler.Level.SpawnPointers = new List<SpawnPointer>();
+        levelDirector.SpawnPointers = new List<SpawnPointer>();
         
-        int obstaclesCountInLine = levelAssembler.HorizontalLevelSize / 2;
-        float xAxisPointersModifier = levelAssembler.GroundLength / obstaclesCountInLine;
-        float xAxisLengthIndent = levelAssembler.GroundLength / 2 / xAxisPointersModifier;
+        int obstaclesCountInLine = levelDirector.HorizontalSize / 2;
+        float xAxisPointersModifier = levelDirector.LevelLength / obstaclesCountInLine;
+        float xAxisLengthIndent = levelDirector.LevelLength / 2 / xAxisPointersModifier;
     
-        for (int i = 0; i < levelAssembler.LevelConfig.SpawnPointersColumnsCount; i++)
+        for (int i = 0; i < levelDirector.LevelConfig.SpawnPointersColumnsCount; i++)
         {
-            float zAxisSpawnPointer = levelAssembler.GroundWidth / 2 - i * levelAssembler.GroundWidth;
+            float zAxisSpawnPointer = levelDirector.LevelWidth / 2 - i * levelDirector.LevelWidth;
             
             for (int j = 0; j < obstaclesCountInLine; j++)
             {
-                float xAxisSpawnPointer = levelAssembler.GroundLength / 2 - xAxisLengthIndent - j * xAxisPointersModifier;
+                float xAxisSpawnPointer = levelDirector.LevelLength / 2 - xAxisLengthIndent - j * xAxisPointersModifier;
                 
-                var spawnPointer = GetLevelItem(levelAssembler.SpawnPointersPool);
+                var spawnPointer = levelDirector.SpawnPointersPool.TryGetItem();
                 
                 spawnPointer.transform.position = new Vector3(xAxisSpawnPointer, 0, zAxisSpawnPointer);
-                levelAssembler.Level.SpawnPointers.Add(spawnPointer);
-                spawnPointer.transform.SetParent(levelAssembler.Level.transform);
+                levelDirector.SpawnPointers.Add(spawnPointer.GetComponent<SpawnPointer>());
+                spawnPointer.transform.SetParent(levelDirector.Level.transform);
             }
+        }
+        
+        ShuffleSpawnPoints(levelDirector.SpawnPointers);
+    }
+    
+    private void ShuffleSpawnPoints(List<SpawnPointer> spawnPointers)
+    {
+        for (int i = 0; i < spawnPointers.Count; i++)
+        {
+            var temp = spawnPointers[i];
+            var j = Random.Range(0, spawnPointers.Count);
+            
+            spawnPointers[i] = spawnPointers[j];
+            spawnPointers[j] = temp;
         }
     }
 }

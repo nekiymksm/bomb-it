@@ -17,7 +17,7 @@ public class PlayerTracker : MonoBehaviour
     private void Awake()
     {
         _camera = Camera.main;
-        _player = _level.Player;
+        _player = _level.CharactersDirector.Player;
     }
 
     private void Start()
@@ -45,7 +45,7 @@ public class PlayerTracker : MonoBehaviour
     
     private void SetCamera()
     {
-        var groundScale = _level.Ground.transform.localScale;
+        var groundScale = _level.LevelDirector.Ground.transform.localScale;
         
         _leftLimit = -groundScale.x / 2 + _camera.orthographicSize * _camera.aspect;
         _rightLimit = groundScale.x / 2 - _camera.orthographicSize * _camera.aspect;

@@ -2,28 +2,28 @@ using UnityEngine;
 
 public class GroundBuilder : Builder
 {
-    public override void Build(LevelAssembler levelAssembler)
+    public override void Build(LevelDirector levelDirector)
     {
-        SetGround(levelAssembler);
+        SetGround(levelDirector);
         
         if (Successor != null)
-            Successor.Build(levelAssembler);
+            Successor.Build(levelDirector);
     }
 
-    private void SetGround(LevelAssembler levelAssembler)
+    private void SetGround(LevelDirector levelDirector)
     {
         var scale = new Vector3();
         
-        levelAssembler.GroundLength = levelAssembler.HorizontalLevelSize * levelAssembler.LevelConfig.PassWidth;
-        levelAssembler.GroundWidth = levelAssembler.VerticalLevelSize * levelAssembler.LevelConfig.PassWidth;
+        levelDirector.LevelLength = levelDirector.HorizontalSize * levelDirector.LevelConfig.PassWidth;
+        levelDirector.LevelWidth = levelDirector.VerticalSize * levelDirector.LevelConfig.PassWidth;
         
-        levelAssembler.Ground.gameObject.SetActive(true);
+        levelDirector.Ground.gameObject.SetActive(true);
 
-        scale.x = levelAssembler.GroundLength + levelAssembler.LevelConfig.PassWidth;
-        scale.y = levelAssembler.LevelConfig.GroundPrefab.transform.localScale.y;
-        scale.z = levelAssembler.GroundWidth + levelAssembler.LevelConfig.PassWidth;
+        scale.x = levelDirector.LevelLength + levelDirector.LevelConfig.PassWidth;
+        scale.y = levelDirector.LevelConfig.GroundPrefab.transform.localScale.y;
+        scale.z = levelDirector.LevelWidth + levelDirector.LevelConfig.PassWidth;
         
-        levelAssembler.Ground.transform.localScale = scale;
-        levelAssembler.Ground.transform.SetParent(levelAssembler.Level.transform);
+        levelDirector.Ground.transform.localScale = scale;
+        levelDirector.Ground.transform.SetParent(levelDirector.Level.transform);
     }
 }

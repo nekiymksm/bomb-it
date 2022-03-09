@@ -42,8 +42,8 @@ public class EnemyController : MonoBehaviour
 
     private void Move()
     {
-        var horizontalLevelLimit = _level.Ground.transform.localScale.x / 2;
-        var verticalLevelLimit = _level.Ground.transform.localScale.z / 2;
+        var horizontalLevelLimit = _level.LevelDirector.Ground.transform.localScale.x / 2;
+        var verticalLevelLimit = _level.LevelDirector.Ground.transform.localScale.z / 2;
 
         _navMeshAgent.SetDestination(new Vector3(Random.Range(-horizontalLevelLimit, horizontalLevelLimit), 
             transform.position.y, Random.Range(-verticalLevelLimit, verticalLevelLimit)));
