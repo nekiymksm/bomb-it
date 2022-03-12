@@ -3,39 +3,39 @@ using UnityEngine;
 
 public class SpawnPointersBuilder : Builder
 {
-    public override void Build(LevelDirector levelDirector)
+    public override void Build(LevelItemsDirector levelItemsDirector)
     {
-        SetSpawnPointers(levelDirector);
+        SetSpawnPointers(levelItemsDirector);
         
         if (Successor != null)
-            Successor.Build(levelDirector);
+            Successor.Build(levelItemsDirector);
     }
 
-    private void SetSpawnPointers(LevelDirector levelDirector)
+    private void SetSpawnPointers(LevelItemsDirector levelItemsDirector)
     {
-        levelDirector.SpawnPointers = new List<SpawnPointer>();
+        levelItemsDirector.SpawnPointers = new List<SpawnPointer>();
         
-        int obstaclesCountInLine = levelDirector.HorizontalSize / 2;
-        float xAxisPointersModifier = levelDirector.LevelLength / obstaclesCountInLine;
-        float xAxisLengthIndent = levelDirector.LevelLength / 2 / xAxisPointersModifier;
+        int obstaclesCountInLine = levelItemsDirector.HorizontalSize / 2;
+        float xAxisPointersModifier = levelItemsDirector.LevelLength / obstaclesCountInLine;
+        float xAxisLengthIndent = levelItemsDirector.LevelLength / 2 / xAxisPointersModifier;
     
-        for (int i = 0; i < levelDirector.LevelConfig.SpawnPointersColumnsCount; i++)
+        for (int i = 0; i < levelItemsDirector.LevelConfig.SpawnPointersColumnsCount; i++)
         {
-            float zAxisSpawnPointer = levelDirector.LevelWidth / 2 - i * levelDirector.LevelWidth;
+            float zAxisSpawnPointer = levelItemsDirector.LevelWidth / 2 - i * levelItemsDirector.LevelWidth;
             
             for (int j = 0; j < obstaclesCountInLine; j++)
             {
-                float xAxisSpawnPointer = levelDirector.LevelLength / 2 - xAxisLengthIndent - j * xAxisPointersModifier;
+                float xAxisSpawnPointer = levelItemsDirector.LevelLength / 2 - xAxisLengthIndent - j * xAxisPointersModifier;
                 
-                var spawnPointer = levelDirector.SpawnPointersPool.TryGetItem();
+                var spawnPointer = levelItemsDirector.SpawnPointersPool.TryGetItem();
                 
                 spawnPointer.transform.position = new Vector3(xAxisSpawnPointer, 0, zAxisSpawnPointer);
-                levelDirector.SpawnPointers.Add(spawnPointer.GetComponent<SpawnPointer>());
-                spawnPointer.transform.SetParent(levelDirector.Level.transform);
+                levelItemsDirector.SpawnPointers.Add(spawnPointer.GetComponent<SpawnPointer>());
+                spawnPointer.transform.SetParent(levelItemsDirector.Level.transform);
             }
         }
         
-        ShuffleSpawnPoints(levelDirector.SpawnPointers);
+        ShuffleSpawnPoints(levelItemsDirector.SpawnPointers);
     }
     
     private void ShuffleSpawnPoints(List<SpawnPointer> spawnPointers)

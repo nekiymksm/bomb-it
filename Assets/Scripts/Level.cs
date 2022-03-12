@@ -8,38 +8,38 @@ public class Level : MonoBehaviour
     
     private NavMeshSurface _navMeshSurface;
     
-    public LevelDirector LevelDirector { get; private set; }
+    public LevelItemsDirector LevelItemsDirector { get; private set; }
     public CharactersDirector CharactersDirector { get; private set; }
 
     public event Action LevelStarted;
 
     private void Awake()
     {
-        LevelDirector = new LevelDirector(this, _levelConfig);
+        LevelItemsDirector = new LevelItemsDirector(this, _levelConfig);
         CharactersDirector = new CharactersDirector(this, _levelConfig);
         
-        LevelDirector.LoadItems();
+        LevelItemsDirector.LoadItems();
         CharactersDirector.LoadCharacters();
 
-        _navMeshSurface = LevelDirector.Ground.GetComponent<NavMeshSurface>();
+        _navMeshSurface = LevelItemsDirector.Ground.GetComponent<NavMeshSurface>();
     }
 
     public void StartLevel()
     {
         gameObject.SetActive(true);
         
-        LevelDirector.AssembleLevel();
+        LevelItemsDirector.AssembleLevel();
         _navMeshSurface.BuildNavMesh();
-        CharactersDirector.SpawnCharacters(LevelDirector.SpawnPointers);
+        CharactersDirector.SpawnCharacters(LevelItemsDirector.SpawnPointers);
 
         LevelStarted?.Invoke();
     }
 
     public void ClearLevel()
     {
-        LevelDirector.Ground.gameObject.SetActive(false);
-        LevelDirector.Ground.transform.SetParent(transform);
-        LevelDirector.RefreshLevelItems();
+        LevelItemsDirector.Ground.gameObject.SetActive(false);
+        LevelItemsDirector.Ground.transform.SetParent(transform);
+        LevelItemsDirector.RefreshLevelItems();
         CharactersDirector.ResetCharacters();
     }
 }

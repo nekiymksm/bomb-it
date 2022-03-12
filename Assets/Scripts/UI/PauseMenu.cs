@@ -1,39 +1,39 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PauseMenu : UiItem
 {
-    [SerializeField] private Level _level;
+    [SerializeField] private GameDirector _gameDirector;
     [SerializeField] private Button _resumeButton;
     [SerializeField] private Button _restartButton;
+    [SerializeField] private Button _exitMenuButton;
 
-    public event Action Closed;
-    
     protected override void OnOpen()
     {
         _resumeButton.onClick.AddListener(OnResumeButtonClick);
         _restartButton.onClick.AddListener(OnRestartButtonClick);
+        _exitMenuButton.onClick.AddListener(OnExitMenuButtonClick);
     }
 
     protected override void OnClose()
     {
         _resumeButton.onClick.RemoveListener(OnResumeButtonClick);
         _restartButton.onClick.RemoveListener(OnRestartButtonClick);
-
-        Closed?.Invoke();
+        _exitMenuButton.onClick.RemoveListener(OnExitMenuButtonClick);
     }
 
     private void OnResumeButtonClick()
     {
-        gameObject.SetActive(false);
+        _gameDirector.SetPauseActive(false);
     }
     
     private void OnRestartButtonClick()
     {
-        gameObject.SetActive(false);
-        
-        _level.ClearLevel();
-        _level.StartLevel();
+        _gameDirector.RestartLevel();
+    }
+    
+    private void OnExitMenuButtonClick()
+    {
+        _gameDirector.LoadMainMenu();
     }
 }

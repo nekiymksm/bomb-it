@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class LevelBuilder : Builder
 {
-    public override void Build(LevelDirector levelDirector)
+    public override void Build(LevelItemsDirector levelItemsDirector)
     {
-        SetLevelSize(levelDirector);
+        SetLevelSize(levelItemsDirector);
         
         if (Successor != null)
-            Successor.Build(levelDirector);
+            Successor.Build(levelItemsDirector);
     }
     
-    private void SetLevelSize(LevelDirector levelDirector)
+    private void SetLevelSize(LevelItemsDirector levelItemsDirector)
     {
-        levelDirector.HorizontalSize = Random.Range(levelDirector.LevelConfig.MinObstaclesInLineCount, 
-            levelDirector.LevelConfig.MaxObstaclesInLineCount);
-        levelDirector.VerticalSize = Random.Range(levelDirector.LevelConfig.MinObstaclesInLineCount, 
-            levelDirector.LevelConfig.MaxObstaclesInLineCount);
+        levelItemsDirector.HorizontalSize = Random.Range(levelItemsDirector.LevelConfig.MinObstaclesInLineCount, 
+            levelItemsDirector.LevelConfig.MaxObstaclesInLineCount);
+        levelItemsDirector.VerticalSize = Random.Range(levelItemsDirector.LevelConfig.MinObstaclesInLineCount, 
+            levelItemsDirector.LevelConfig.MaxObstaclesInLineCount);
     
-        if (levelDirector.VerticalSize > levelDirector.HorizontalSize / 2)
-            levelDirector.VerticalSize = levelDirector.HorizontalSize / 2;
+        if (levelItemsDirector.VerticalSize > levelItemsDirector.HorizontalSize / 2)
+            levelItemsDirector.VerticalSize = levelItemsDirector.HorizontalSize / 2;
     }
 }

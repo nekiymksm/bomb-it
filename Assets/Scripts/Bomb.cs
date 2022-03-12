@@ -4,15 +4,13 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     [SerializeField] private BombingConfig _bombingConfig;
-
-    private ItemsPool _blastWaves;
+    [SerializeField] private BlastWave[] _blastWaves;
+    
     private Player _player;
     
     private void Awake()
     {
         _player = GetComponentInParent<Player>();
-
-        LoadBlastWaves();
     }
 
     private void OnEnable()
@@ -20,40 +18,17 @@ public class Bomb : MonoBehaviour
         StartCoroutine(DelayExplosion());
     }
 
-    private void LoadBlastWaves()
-    {
-        _blastWaves = new ItemsPool();
-        
-        _blastWaves.LoadItemsPool(_bombingConfig.BlastWavePrefab.gameObject, transform, _bombingConfig.BlastWavesCount);
-    }
-
     private void Explode()
     {
         var explodeDirectionAngle = 360 * Mathf.Deg2Rad;
         
-        for (int i = 0; i < _bombingConfig.BlastWavesCount; i++)
+        for (int i = 0; i < _blastWaves.Length; i++)
         {
-            var blastWave = _blastWaves.TryGetItem();
-            var direction = GetExplodeDirection(explodeDirectionAngle, i);
-            var distance = GetExplodeDistance(direction);
-            
-            var position = new Vector3();
-
-            position.x = transform.position.x + distance * direction.x;
-            position.y = transform.position.y;
-            position.z = transform.position.z + distance * direction.z;
-            
-            var scale = new Vector3();
-            
-            scale.x = distance * 2 * Mathf.Abs(direction.x) + blastWave.transform.localScale.x;
-            scale.y = blastWave.transform.localScale.y;
-            scale.z = distance * 2 * Mathf.Abs(direction.z) + blastWave.transform.localScale.z;
-
-            blastWave.transform.position = position;
-            blastWave.transform.localScale = scale;
-            blastWave.transform.SetParent(_player.Level.transform);
+            _blastWaves[i].gameObject.SetActive(true);
+            _blastWaves[i].SetWave(this, GetExplodeDirection(explodeDirectionAngle, i));
+            _blastWaves[i].transform.SetParent(_player.Level.transform);
         }
-        
+
         gameObject.SetActive(false);
     }
 
@@ -66,16 +41,6 @@ public class Bomb : MonoBehaviour
         explodeDirection.z = Mathf.Sin(explodeDirectionAngle / _bombingConfig.BlastWavesCount * directionNumber);
 
         return explodeDirection;
-    }
-
-    private float GetExplodeDistance(Vector3 explodeDirection)
-    {
-        var spawnDistance = _bombingConfig.ExplosionWaveDistance / 2;
-
-        if (Physics.Raycast(transform.position, explodeDirection, out RaycastHit hit, _bombingConfig.ExplosionWaveDistance)
-            && hit.collider.TryGetComponent(out Obstacle obstacle)) {spawnDistance = hit.distance / 2;}
-
-        return spawnDistance;
     }
 
     private IEnumerator DelayExplosion()

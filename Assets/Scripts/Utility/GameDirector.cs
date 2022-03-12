@@ -3,9 +3,12 @@ using UnityEngine;
 public class GameDirector : MonoBehaviour
 {
     [SerializeField] private UiRoot _uiRoot;
+    [SerializeField] private Level _level;
     
     private MainMenu _mainMenu;
     private PauseMenu _pauseMenu;
+    private CreatorsWindow _creatorsWindow;
+    private ScoresPanel _scoresPanel;
     
     public bool GamePaused { get; private set; }
 
@@ -13,34 +16,59 @@ public class GameDirector : MonoBehaviour
     {
         _mainMenu = _uiRoot.GetUiItem<MainMenu>();
         _pauseMenu = _uiRoot.GetUiItem<PauseMenu>();
+        _creatorsWindow = _uiRoot.GetUiItem<CreatorsWindow>();
+        _scoresPanel = _uiRoot.GetUiItem<ScoresPanel>();
     }
 
     private void Start()
     {
-        _pauseMenu.Closed += ResumeGame;
-        
-        _mainMenu.gameObject.SetActive(true);
+        LoadMainMenu();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && _mainMenu.gameObject.activeSelf == false)
         {
-            PauseGame();
+            SetPauseActive(true);
+        }
+    }
+    
+    public void SetPauseActive(bool isPause)
+    {
+        if (isPause)
+        {
+            _pauseMenu.gameObject.SetActive(true);
+            
+            Time.timeScale = 0;
+            GamePaused = true;
+        }
+        else
+        {
+            _pauseMenu.gameObject.SetActive(false);
+            
+            Time.timeScale = 1;
+            GamePaused = false;
         }
     }
 
-    private void PauseGame()
+    public void RestartLevel()
     {
-        _pauseMenu.gameObject.SetActive(true);
-            
-        Time.timeScale = 0;
-        GamePaused = true;
+        SetPauseActive(false);
+        _scoresPanel.gameObject.SetActive(true);
+        _level.ClearLevel();
+        _level.StartLevel();
     }
 
-    private void ResumeGame()
+    public void LoadMainMenu()
     {
-        Time.timeScale = 1;
-        GamePaused = false;
+        SetPauseActive(false);
+        _scoresPanel.gameObject.SetActive(false);
+        _level.ClearLevel();
+        _mainMenu.gameObject.SetActive(true);
+    }
+
+    public void ShowCreators()
+    {
+        _creatorsWindow.gameObject.SetActive(true);
     }
 }

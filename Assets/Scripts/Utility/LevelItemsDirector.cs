@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelDirector
+public class LevelItemsDirector
 {
     private readonly LevelBuilder _levelBuilder = new LevelBuilder();
     private readonly GroundBuilder _groundBuilder = new GroundBuilder();
@@ -23,7 +23,7 @@ public class LevelDirector
     public float LevelWidth { get; set; }
     public List<SpawnPointer> SpawnPointers { get; set; }
 
-    public LevelDirector(Level level, LevelConfig levelConfig)
+    public LevelItemsDirector(Level level, LevelConfig levelConfig)
     {
         Level = level;
         LevelConfig = levelConfig;
