@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c61830f7bdc3c94da170e0256eb5bac, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
+  _playerPrefab: {fileID: 6364040649996368241, guid: fdcfb758cf94ab44ab759b1b59fafe20, type: 3}
+  _enemyPrefab: {fileID: 5099671391484749698, guid: ce2ebbe2098309443a41c1619ca52555, type: 3}
   _groundPrefab: {fileID: -3137776828656773099, guid: 10e46b58b94442846b74f366b355c7a2, type: 3}
   _borderPrefab: {fileID: -2706117075926552122, guid: dc137a6ad3bf5014fb01912f2deee3ec, type: 3}
   _obstaclePrefab: {fileID: 2504747663608451131, guid: c4b111ee5d626d144b5ff194acc00344, type: 3}

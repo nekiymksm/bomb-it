@@ -1,36 +1,63 @@
+using LevelCreation;
 using UnityEngine;
 
+[RequireComponent(typeof(Player), typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private Player _player;
+    [SerializeField] private CharacterController _characterController;
     [SerializeField] private float _moveSpeedModifier;
     [SerializeField] private float _rotateSpeedModifier;
-    
-    private float _horizontalPointer;
-    private float _verticalPointer;
-    
-    public float HorizontalPointer => _horizontalPointer;
-    public float VerticalPointer => _verticalPointer;
-    
-    private void Update()
+
+    private Level _level;
+    private GameDirector _gameDirector;
+
+    private void Awake()
     {
-        _horizontalPointer = Input.GetAxisRaw("Horizontal");
-        _verticalPointer = Input.GetAxisRaw("Vertical");
-        
+        _level = _player.Level;
+        _gameDirector = GetComponentInParent<GameDirector>();
+    }
+
+    private void FixedUpdate()
+    {
         Move();
     }
-    
+
+    private void Update()
+    {
+        TrySpawnBomb();
+    }
+
     private void Move()
     {
-        var moveVector = new Vector3(_horizontalPointer, 0, _verticalPointer) * _moveSpeedModifier;
+        var horizontalPointer = Input.GetAxisRaw("Horizontal");
+        var verticalPointer = Input.GetAxisRaw("Vertical");
         
-        transform.Translate(moveVector * Time.deltaTime, Space.World);
+        var moveVector = new Vector3(horizontalPointer, 0, verticalPointer) * _moveSpeedModifier;
+        
+        _characterController.Move(moveVector * Time.deltaTime);
     
         if (moveVector != Vector3.zero)
         {
-            Quaternion moveDirection = Quaternion.LookRotation(new Vector3(_horizontalPointer, 0, _verticalPointer));
+            var rotateDirection = Quaternion.LookRotation(new Vector3(horizontalPointer, 0, verticalPointer));
             
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, moveDirection, 
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateDirection, 
                 _rotateSpeedModifier * Time.deltaTime);
+        }
+    }
+
+    private void TrySpawnBomb()
+    {
+        if (Input.GetButtonDown("Fire1") && _gameDirector.GamePaused == false)
+        {
+            var bomb = _player.BombsPool.TryGetItem();
+
+            if (bomb != null)
+            {
+                bomb.transform.SetParent(_level.transform);
+                bomb.transform.position = _player.transform.position;
+                bomb.transform.rotation = _level.transform.rotation;
+            }
         }
     }
 }
