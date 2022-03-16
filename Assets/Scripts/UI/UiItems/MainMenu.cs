@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class MainMenu : UiItem
 {
-    [SerializeField] private GameDirector _gameDirector;
     [SerializeField] private Button _playButton;
     [SerializeField] private Button _creatorsButton;
     [SerializeField] private Button _exitButton;
@@ -25,12 +24,13 @@ public class MainMenu : UiItem
     private void OnPlayButtonClick()
     {
         gameObject.SetActive(false);
-        _gameDirector.RestartLevel();
+        GameDirector.Level.StartLevel();
+        UiRoot.GetUiItem<ScoresPanel>().gameObject.SetActive(true);
     }
     
     private void OnCreatorsButtonClick()
     {
-        _gameDirector.ShowCreators();
+        UiRoot.GetUiItem<CreatorsWindow>().gameObject.SetActive(true);
     }
     
     private void OnExitButtonClick()

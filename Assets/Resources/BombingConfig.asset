@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: BombingConfig
   m_EditorClassIdentifier: 
   _bombPrefab: {fileID: 7350950086722342060, guid: 82df70cef2074dd4fa1a7b6ae2146b8c, type: 3}
-  _blastWavePrefab: {fileID: 5754692237953989854, guid: 02cc79dbde7a7164095aa454529443f9, type: 3}
   _bombsCount: 3
   _blastWavesCount: 4
   _delayToExplosion: 2
   _explosionWaveDistance: 2
-  _explosionDuration: 0.5
+  _explosionDuration: 0.25

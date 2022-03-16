@@ -3,7 +3,7 @@ using UnityEngine;
 public class Player : Character
 {
     [SerializeField] private BombingConfig _bombingConfig;
-    
+
     private ItemsPool _bombsPool;
     
     public ItemsPool BombsPool => _bombsPool;
@@ -22,8 +22,15 @@ public class Player : Character
     {
         if (collider.TryGetComponent(out BlastWave blastWave))
         {
-            gameObject.SetActive(false);
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        gameObject.SetActive(false);
+        
+        Level.GameDirector.OverGame();
     }
 
     private void LoadBombsPool()

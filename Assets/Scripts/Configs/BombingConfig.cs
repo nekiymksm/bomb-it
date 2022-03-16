@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BombingConfig", menuName = "GameConfigs/BombingConfig")]
+[CreateAssetMenu(fileName = "BombingConfig", menuName = "Configs/BombingConfig")]
 public class BombingConfig : ScriptableObject
 {
     [SerializeField] private Bomb _bombPrefab;

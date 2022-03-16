@@ -24,6 +24,5 @@ public class GroundBuilder : Builder
         scale.z = levelItemsDirector.LevelWidth + levelItemsDirector.LevelConfig.PassWidth;
         
         levelItemsDirector.Ground.transform.localScale = scale;
-        levelItemsDirector.Ground.transform.SetParent(levelItemsDirector.Level.transform);
     }
 }

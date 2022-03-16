@@ -7,6 +7,9 @@ public class Enemy : Character
         if (collider.TryGetComponent(out BlastWave blastWave))
         {
             gameObject.SetActive(false);
+            
+            Level.GameDirector.ScoresManager.AddScore();
+            Level.GameDirector.LevelProgressHandler.CountKill();
         }
     }
 }

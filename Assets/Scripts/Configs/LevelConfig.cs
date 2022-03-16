@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LevelConfig", menuName = "GameConfigs/LevelConfig")]
+[CreateAssetMenu(fileName = "LevelConfig", menuName = "Configs/LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
     [SerializeField] private Player _playerPrefab;
-    [SerializeField] private Character _enemyPrefab;
+    [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private Ground _groundPrefab;
     [SerializeField] private Border _borderPrefab;
     [SerializeField] private Obstacle _obstaclePrefab;
@@ -16,7 +16,7 @@ public class LevelConfig : ScriptableObject
     [SerializeField] private int _passWidth;
 
     public Player PlayerPrefab => _playerPrefab;
-    public Character EnemyPrefab => _enemyPrefab;
+    public Enemy EnemyPrefab => _enemyPrefab;
     public Ground GroundPrefab => _groundPrefab;
     public Border BorderPrefab => _borderPrefab;
     public Obstacle ObstaclePrefab => _obstaclePrefab;

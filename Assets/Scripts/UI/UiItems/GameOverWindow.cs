@@ -1,39 +1,34 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PauseMenu : UiItem
+public class GameOverWindow : UiItem
 {
-    [SerializeField] private GameDirector _gameDirector;
-    [SerializeField] private Button _resumeButton;
     [SerializeField] private Button _restartButton;
     [SerializeField] private Button _exitMenuButton;
 
     protected override void OnOpen()
     {
-        _resumeButton.onClick.AddListener(OnResumeButtonClick);
         _restartButton.onClick.AddListener(OnRestartButtonClick);
         _exitMenuButton.onClick.AddListener(OnExitMenuButtonClick);
     }
 
     protected override void OnClose()
     {
-        _resumeButton.onClick.RemoveListener(OnResumeButtonClick);
         _restartButton.onClick.RemoveListener(OnRestartButtonClick);
         _exitMenuButton.onClick.RemoveListener(OnExitMenuButtonClick);
-    }
-
-    private void OnResumeButtonClick()
-    {
-        _gameDirector.SetPauseActive(false);
     }
     
     private void OnRestartButtonClick()
     {
-        _gameDirector.RestartLevel();
+        gameObject.SetActive(false);
+        GameDirector.Level.RestartLevel();
     }
-    
+
     private void OnExitMenuButtonClick()
     {
-        _gameDirector.LoadMainMenu();
+        gameObject.SetActive(false);
+        GameDirector.Level.ClearLevel();
+        UiRoot.GetUiItem<ScoresPanel>().gameObject.SetActive(false);
+        UiRoot.GetUiItem<MainMenu>().gameObject.SetActive(true);
     }
 }

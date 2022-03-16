@@ -65,6 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bombingConfig: {fileID: 11400000, guid: a72892c83e30d69479f3a3b0cfca1476, type: 2}
+  _characterController: {fileID: 2964349839403739828}
 --- !u!114 &-83994624267019835
 MonoBehaviour:
   m_ObjectHideFlags: 0

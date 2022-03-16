@@ -1,6 +1,7 @@
+using LevelCreation;
 using UnityEngine;
 
-[RequireComponent(typeof(Player))]
+[RequireComponent(typeof(Player), typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Player _player;
